@@ -1,0 +1,55 @@
+version: "3.9"
+
+# only mongodb dependency is missing
+
+services:
+  rest-service:
+    image: dendriel/config-creator-rest
+    command: "java -jar /app/config-creator-rest.jar"
+    restart: always
+    ports:
+      - 8081:8081
+    working_dir: /app
+    environment:
+      - MONGO_DB_HOST=192.168.15.9
+      - AUTH_SERVICE_URL=http://auth-service:8080
+      - EXPORTER_QUEUE_URL=http://sqs-service:9324
+      - AWS_ACCESS_KEY_ID=1111
+      - AWS_SECRET_KEY=2222
+  auth-service:
+    image: dendriel/npc-data-manager-auth:latest
+    command: "java -jar /app/npc-data-manager-auth.jar"
+    restart: always
+    ports:
+      - 8080:8080
+    working_dir: /app
+    environment:
+      - MYSQL_DB=the_quest
+      - MYSQL_HOST=192.168.15.9
+      - MYSQL_PORT=3306
+      - MYSQL_USER=docker
+      - MYSQL_PASS=pass
+  storage-service:
+    image: dendriel/npc-data-manager-storage:latest
+    command: "java -jar /npc-data-manager-storage.jar"
+    restart: always
+    ports:
+      - 8082:8082
+    working_dir: /app
+    volumes:
+      - c:\.aws:/root/.aws:ro
+    environment:
+      - MYSQL_DB=the_quest
+      - MYSQL_HOST=192.168.15.9
+      - MYSQL_PORT=3306
+      - MYSQL_USER=docker
+      - MYSQL_PASS=pass
+      - AUTH_URL=http://192.168.15.9:8080
+  sqs-service:
+    image: roribio16/alpine-sqs:latest
+    restart: always
+    ports:
+      - 9324:9324
+      - 9325:9325
+    volumes:
+      - /e/workspace/config-creator/conf/sqs:/opt/custom
