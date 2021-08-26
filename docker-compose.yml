@@ -1,7 +1,5 @@
 version: "3.9"
 
-# only mongodb dependency is missing
-
 services:
   front-service:
     image: dendriel/config-creator-front
@@ -12,11 +10,9 @@ services:
       - /e/workspace/config-creator/conf/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
   rest-service:
     image: dendriel/config-creator-rest
-    command: "java -jar /app/config-creator-rest.jar"
     restart: always
     ports:
       - 8081:8081
-    working_dir: /app
     environment:
       - MONGO_DB_HOST=host.docker.internal
       - AUTH_SERVICE_URL=http://auth-service:8080
@@ -25,11 +21,9 @@ services:
       - AWS_SECRET_KEY=2222
   auth-service:
     image: dendriel/npc-data-manager-auth:latest
-    command: "java -jar /app/npc-data-manager-auth.jar"
     restart: always
     ports:
       - 8080:8080
-    working_dir: /app
     environment:
       - MYSQL_DB=the_quest
       - MYSQL_HOST=host.docker.internal
@@ -38,11 +32,9 @@ services:
       - MYSQL_PASS=pass
   storage-service:
     image: dendriel/npc-data-manager-storage:latest
-    command: "java -jar /npc-data-manager-storage.jar"
     restart: always
     ports:
       - 8082:8082
-    working_dir: /app
     volumes:
       - c:\.aws:/root/.aws:ro
     environment:
@@ -52,6 +44,13 @@ services:
       - MYSQL_USER=docker
       - MYSQL_PASS=pass
       - AUTH_URL=http://auth-service:8080
+  exporter-service:
+    image: dendriel/config-creator-exporter
+    restart: always
+    environment:
+      - SERVICE_URL=http://front-service
+      - QUEUE_URL=http://sqs-service:9324/queue/export-request
+      - AUTH_KEY=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleHBvcnRlciIsImV4cCI6MTYzMTc1MDE4NCwiaWF0IjoxNjI5MTU4MTg0fQ.45AW5A7mp7gGCdYztoAadzPPumdV7MAiAXGpBX4be_8
   sqs-service:
     image: roribio16/alpine-sqs:latest
     restart: always
@@ -60,3 +59,6 @@ services:
       - 9325:9325
     volumes:
       - /e/workspace/config-creator/conf/sqs:/opt/custom
+
+# mongodb
+# mysql
