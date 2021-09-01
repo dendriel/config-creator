@@ -45,3 +45,29 @@ active the download button to retrieve the exported data.
 
 Project related pages automatically loads data from the active project. So the project listing page allows to select
 the active project for the current user.
+
+## Run with terraform
+
+Terraform creates all needed infra to run Config Creator in AWS Cloud. Its only required to setup AWS credentials so
+terraform can communicate with AWS. Check AWS docs on how to setup the credentials: https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
+
+**Warning**: terraform launch create many network resources and links, but it has some problems when shutting down
+the setup. Some resources may have to be removed manually. So use terraform only if you are confident you can remove
+some resources manually. 
+
+From `terraform/` directory:
+
+Create the infrastructure:
+```shell
+terraform apply
+```
+
+List everything created and managed by terraform:
+```shell
+terraform state list
+```
+
+Destroy the infrastructure:
+```shell
+terraform destroy
+```
