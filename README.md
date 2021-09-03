@@ -46,6 +46,24 @@ active the download button to retrieve the exported data.
 Project related pages automatically loads data from the active project. So the project listing page allows to select
 the active project for the current user.
 
+
+## Run with docker-compose
+
+Setup:
+
+Create an **empty** folder called `mysql_data` inside `data` folder to be used by mysql-service throughout a mapped volume.
+Do not add files to this folder otherwise mysql-service won't start.
+
+Boot the infra:
+```shell
+docker-compose up
+```
+
+Stop and remove all containers:
+```shell
+docker-compose stop && docker-compose rm
+```
+
 ## Run with terraform
 
 Terraform creates all needed infra to run Config Creator in AWS Cloud. Its only required to setup AWS credentials so

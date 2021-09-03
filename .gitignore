@@ -68,3 +68,5 @@ fabric.properties
 .terraform*
 *.tfstate.backup
 *.tfstate
+
+data/mysql_data/*
