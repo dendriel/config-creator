@@ -51,20 +51,36 @@ the active project for the current user.
 
 Setup:
 
-Create an **empty** folder called `mysql_data` inside `data` folder to be used by mysql-service throughout a mapped volume.
-Do not add files to this folder otherwise mysql-service won't start.
+- Setup AWS credentials and configure the `storage-service` volume mapping to the credentials folder
+  - Default volume mapping is `c:\.aws:/root/.aws:ro`
 
 Boot the infra:
 ```shell
 docker-compose up
 ```
 
+Credentials:
+- Username: root
+- Password: dendriel
+
+Docker-compose will create the following containers:
+
+- config-creator_front-service - nginx server with static files from react-app + rules to proxy requests to rest, auth and storage services;
+- config-creator_rest-service - rest server with CRUD APIs; also, enqueue export requests via sqs-service;
+- config-creator_storage-service - stores exported configurations in a AWS S3 bucket;
+- config-creator_auth-service - used by login and by backend services to authenticate requests;
+- config-creator_exporter-service - exports projects configurations (meant to be a lambda when deploying on AWS);
+- config-creator_mongo-service - stores project data;
+- config-creator_mysql-service - stores user authentication data and storage-service related data;
+- config-creator_sqs-service - allows to enqueue/dequeue configuration export requests.
+
+
 Stop and remove all containers:
 ```shell
 docker-compose stop && docker-compose rm
 ```
 
-## Run with terraform
+## Run with terraform (WIP)
 
 Terraform creates all needed infra to run Config Creator in AWS Cloud. Its only required to setup AWS credentials so
 terraform can communicate with AWS. Check AWS docs on how to setup the credentials: https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html

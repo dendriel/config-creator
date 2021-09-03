@@ -70,3 +70,4 @@ fabric.properties
 *.tfstate
 
 data/mysql_data/*
+data/mongo_data/*
