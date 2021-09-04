@@ -23,6 +23,8 @@ services:
       - EXPORTER_QUEUE_URL=http://sqs-service:9324
       - AWS_ACCESS_KEY_ID=1111
       - AWS_SECRET_KEY=2222
+      - SERVICE_URL=http://front-service:3000
+      - SERVICE_AUTH_KEY=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXN0IiwiZXhwIjoxNjMzMzc4NzQ0LCJpYXQiOjE2MzA3ODY3NDR9.rvlpOK5RljrCIWfdTKMg0kNlpOPMGghB9yILNE1V3jY
     depends_on:
       mongo-service:
         condition: service_healthy
