@@ -62,9 +62,9 @@ EOF
 resource "aws_autoscaling_group" "asg" {
   name                      = "config-creator-asg"
   launch_configuration      = aws_launch_configuration.lc.name
-  min_size                  = 1
-  max_size                  = 2
-  desired_capacity          = 1
+  min_size                  = 0
+  desired_capacity          = 0
+  max_size                  = 5
   health_check_type         = "ELB"
   health_check_grace_period = 300
   vpc_zone_identifier       = module.vpc.public_subnets

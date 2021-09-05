@@ -15,6 +15,7 @@ resource "aws_ecs_service" "front" {
   cluster         = aws_ecs_cluster.config-creator.id
   task_definition = aws_ecs_task_definition.front.arn
   desired_count   = 1
+  health_check_grace_period_seconds  = 60
 
   ordered_placement_strategy {
     type  = "binpack"
@@ -32,7 +33,13 @@ resource "aws_ecs_service" "front" {
     ignore_changes = [desired_count]
   }
 
-  launch_type = "EC2"
+  capacity_provider_strategy {
+    base = 0
+    weight = 1
+    capacity_provider = aws_ecs_capacity_provider.capacity-provider.name
+  }
+
+  #launch_type = "EC2"
   depends_on  = [aws_lb_listener.config-creator-front-rule]
 }
 

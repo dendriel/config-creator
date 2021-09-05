@@ -105,3 +105,10 @@ Destroy the infrastructure:
 ```shell
 terraform destroy
 ```
+
+Resources that may have to be deleted manually:
+
+- ECS cluster (wait for internet gateway deletion to be stuck);
+- Auto scaling group;
+- EC2 instances.
+  
