@@ -39,23 +39,7 @@ resource "aws_security_group" "alb-sg" {
   }
 }
 
-resource "aws_lb_target_group" "front-end-lb-target-group" {
-  name        = "front-lb-target-group"
-  port        = "80"
-  protocol    = "HTTP"
-  target_type = "instance"
-  vpc_id      = data.aws_vpc.main.id
-  health_check {
-    path                = "/"
-    healthy_threshold   = 2
-    unhealthy_threshold = 10
-    timeout             = 60
-    interval            = 300
-    matcher             = "200,301,302"
-  }
-}
-
-resource "aws_lb_listener" "config-creator-front-listener" {
+resource "aws_lb_listener" "config-creator-lb-listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"
   protocol          = "HTTP"
@@ -71,7 +55,7 @@ resource "aws_lb_listener" "config-creator-front-listener" {
 }
 
 resource "aws_lb_listener_rule" "config-creator-front-rule" {
-  listener_arn = aws_lb_listener.config-creator-front-listener.arn
+  listener_arn = aws_lb_listener.config-creator-lb-listener.arn
   priority     = 100
 
   action {
@@ -82,6 +66,28 @@ resource "aws_lb_listener_rule" "config-creator-front-rule" {
   condition {
     host_header {
       values = [aws_lb.alb.dns_name]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "config-creator-auth-rule" {
+  listener_arn = aws_lb_listener.config-creator-lb-listener.arn
+  priority     = 90
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.auth-lb-target-group.arn
+  }
+
+  condition {
+    host_header {
+      values = [aws_lb.alb.dns_name]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/auth/*"]
     }
   }
 }

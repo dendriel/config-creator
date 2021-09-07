@@ -59,7 +59,7 @@ resource "aws_ecs_service" "front-service" {
   }
 
   #launch_type = "EC2"
-  depends_on  = [aws_lb_listener.config-creator-front-listener]
+  depends_on  = [aws_lb_listener.config-creator-lb-listener]
 }
 
 resource "aws_cloudwatch_log_group" "front-service-log-group" {
@@ -68,5 +68,21 @@ resource "aws_cloudwatch_log_group" "front-service-log-group" {
   tags = {
     env = "prod"
     terraform = "true"
+  }
+}
+
+resource "aws_lb_target_group" "front-end-lb-target-group" {
+  name        = "front-lb-target-group"
+  port        = "80"
+  protocol    = "HTTP"
+  target_type = "instance"
+  vpc_id      = data.aws_vpc.main.id
+  health_check {
+    path                = "/"
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    timeout             = 60
+    interval            = 300
+    matcher             = "200,301,302"
   }
 }

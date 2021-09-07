@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "auth" {
       "essential": true,
       "portMappings": [
         {
-          "containerPort": 80
+          "containerPort": 8080
         }
       ],
       "logConfiguration": {
@@ -21,6 +21,7 @@ resource "aws_ecs_task_definition" "auth" {
         }
       },
       "environment": [
+        { "name": "BASE_PATH",  "value": "/auth" },
         { "name": "MYSQL_HOST", "value": "${aws_db_instance.config-creator.address}" },
         { "name": "MYSQL_DB",   "value":  "${aws_db_instance.config-creator.name}" },
         { "name": "MYSQL_USER", "value":  "${var.db.user}" },
@@ -48,9 +49,9 @@ resource "aws_ecs_service" "auth-service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb.arn
+    target_group_arn = aws_lb_target_group.auth-lb-target-group.arn
     container_name   = "config-creator-auth"
-    container_port   = 80
+    container_port   = 8080
   }
 
   # Optional: Allow external changes without Terraform plan difference(for example ASG)
@@ -65,7 +66,7 @@ resource "aws_ecs_service" "auth-service" {
   }
 
   #launch_type = "EC2"
-  # depends_on  = [aws_lb_listener.config-creator-auth-listener]
+  depends_on  = [aws_lb_listener.config-creator-lb-listener]
 }
 
 resource "aws_cloudwatch_log_group" "auth-service-log-group" {
@@ -74,5 +75,21 @@ resource "aws_cloudwatch_log_group" "auth-service-log-group" {
   tags = {
     env = "prod"
     terraform = "true"
+  }
+}
+
+resource "aws_lb_target_group" "auth-lb-target-group" {
+  name        = "auth-lb-target-group"
+  port        = "8080"
+  protocol    = "HTTP"
+  target_type = "instance"
+  vpc_id      = data.aws_vpc.main.id
+  health_check {
+    path                = "/health"
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    timeout             = 60
+    interval            = 300
+    matcher             = "200"
   }
 }

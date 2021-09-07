@@ -40,4 +40,9 @@ resource "aws_security_group" "rds-sg" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = {
+    env = "prod"
+    terraform = "true"
+  }
 }
