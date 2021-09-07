@@ -42,7 +42,7 @@ resource "aws_ecs_service" "front-service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb.arn
+    target_group_arn = aws_lb_target_group.front-end-lb-target-group.arn
     container_name   = "config-creator-front"
     container_port   = 80
   }

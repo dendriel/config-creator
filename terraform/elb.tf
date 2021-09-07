@@ -39,8 +39,8 @@ resource "aws_security_group" "alb-sg" {
   }
 }
 
-resource "aws_lb_target_group" "alb" {
-  name        = "config-creator-front"
+resource "aws_lb_target_group" "front-end-lb-target-group" {
+  name        = "front-lb-target-group"
   port        = "80"
   protocol    = "HTTP"
   target_type = "instance"
@@ -59,10 +59,15 @@ resource "aws_lb_listener" "config-creator-front-listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"
   protocol          = "HTTP"
-  # default_action {
-  #   type             = "forward"
-  #   target_group_arn = aws_lb_target_group.alb.arn
-  # }
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not Found"
+      status_code  = "404"
+    }
+  }
 }
 
 resource "aws_lb_listener_rule" "config-creator-front-rule" {
@@ -71,7 +76,7 @@ resource "aws_lb_listener_rule" "config-creator-front-rule" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.alb.arn
+    target_group_arn = aws_lb_target_group.front-end-lb-target-group.arn
   }
 
   condition {
