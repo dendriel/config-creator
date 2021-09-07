@@ -5,6 +5,7 @@ module "vpc" {
   azs             = var.vpc.azs
   cidr            = var.vpc.cidr
   public_subnets  = var.vpc.public_subnets_cidr
+  private_subnets  = var.vpc.private_subnets_cidr
 
   tags = {
     env = "prod"

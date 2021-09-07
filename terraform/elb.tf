@@ -40,7 +40,7 @@ resource "aws_security_group" "alb-sg" {
 }
 
 resource "aws_lb_target_group" "alb" {
-  name        = "config-creator-alb-target-group"
+  name        = "config-creator-front"
   port        = "80"
   protocol    = "HTTP"
   target_type = "instance"
@@ -55,12 +55,56 @@ resource "aws_lb_target_group" "alb" {
   }
 }
 
-resource "aws_lb_listener" "config-creator-front-rule" {
+resource "aws_lb_listener" "config-creator-front-listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"
   protocol          = "HTTP"
-  default_action {
+  # default_action {
+  #   type             = "forward"
+  #   target_group_arn = aws_lb_target_group.alb.arn
+  # }
+}
+
+resource "aws_lb_listener_rule" "config-creator-front-rule" {
+  listener_arn = aws_lb_listener.config-creator-front-listener.arn
+  priority     = 100
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb.arn
   }
+
+  condition {
+    host_header {
+      values = [aws_lb.alb.dns_name]
+    }
+  }
 }
+
+# resource "aws_lb_listener" "config-creator-auth-listener" {
+#   load_balancer_arn = aws_lb.alb.arn
+#   port              = "80"
+#   protocol          = "HTTP"
+# }
+
+# resource "aws_lb_listener_rule" "config-creator-auth-rule" {
+#   listener_arn = aws_lb_listener.config-creator-auth-listener.arn
+#   priority     = 100
+
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.alb.arn
+#   }
+
+#   condition {
+#     path_pattern {
+#       values = ["/auth/*"]
+#     }
+#   }
+
+#   condition {
+#     host_header {
+#       values = [aws_lb.alb.dns_name]
+#     }
+#   }
+# }

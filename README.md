@@ -106,9 +106,9 @@ Destroy the infrastructure:
 terraform destroy
 ```
 
-Resources that may have to be deleted manually:
+Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting):
 
-- ECS cluster (wait for internet gateway deletion to be stuck);
+- ECS cluster;
 - Auto scaling group;
-- EC2 instances.
+- Terminate remaining EC2 instances.
   

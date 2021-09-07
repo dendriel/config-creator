@@ -1,8 +1,27 @@
-# update file container-def, so it's pulling image from ecr
 resource "aws_ecs_task_definition" "front" {
   family                = "config-creator-front"
-  container_definitions = file("container-definitions/config-creator-front.json")
   network_mode          = "bridge"
+  container_definitions = jsonencode([
+    {
+      "name": "config-creator-front",
+      "image": "registry.hub.docker.com/dendriel/config-creator-front:latest",
+      "cpu": 10,
+      "memory": 256,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": { 
+          "awslogs-group" : "/ecs/config-creator-front",
+          "awslogs-region": "sa-east-1"
+        }
+      }
+    }
+])
 
   tags = {
     env = "prod"
@@ -10,7 +29,7 @@ resource "aws_ecs_task_definition" "front" {
   }
 }
 
-resource "aws_ecs_service" "front" {
+resource "aws_ecs_service" "front-service" {
   name            = "config-creator-front"
   cluster         = aws_ecs_cluster.config-creator.id
   task_definition = aws_ecs_task_definition.front.arn
@@ -40,10 +59,10 @@ resource "aws_ecs_service" "front" {
   }
 
   #launch_type = "EC2"
-  depends_on  = [aws_lb_listener.config-creator-front-rule]
+  depends_on  = [aws_lb_listener.config-creator-front-listener]
 }
 
-resource "aws_cloudwatch_log_group" "log_group" {
+resource "aws_cloudwatch_log_group" "front-service-log-group" {
   name = "/ecs/config-creator-front"
 
   tags = {
