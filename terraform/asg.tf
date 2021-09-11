@@ -21,7 +21,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_security_group" "ec2-sg" {
   name        = "config-creator-allow-all-ec2"
   description = "Allow all"
-  vpc_id      = data.aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
   ingress {
     from_port   = 0
     to_port     = 0
@@ -42,9 +42,9 @@ resource "aws_security_group" "ec2-sg" {
 }
 
 resource "aws_launch_configuration" "lc" {
-  name          = "config-creator-lc"
-  image_id      = data.aws_ami.amazon_linux.id
-  instance_type = "t2.micro"
+  name                        = "config-creator-lc"
+  image_id                    = data.aws_ami.amazon_linux.id
+  instance_type               = "t2.micro"
   iam_instance_profile        = aws_iam_instance_profile.ecs_service_role.name
   key_name                    = var.launch_configuration_key_name
   security_groups             = [aws_security_group.ec2-sg.id]
@@ -69,10 +69,9 @@ resource "aws_autoscaling_group" "asg" {
   max_size                  = 5
   health_check_type         = "ELB"
   health_check_grace_period = 300
-  vpc_zone_identifier       = module.vpc.public_subnets
+  vpc_zone_identifier       = data.aws_subnet_ids.public.ids
 
-  #target_group_arns     = [aws_lb_target_group.alb.arn]
-  protect_from_scale_in = true
+  protect_from_scale_in = false
 
   lifecycle {
     create_before_destroy = true

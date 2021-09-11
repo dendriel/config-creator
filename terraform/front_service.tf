@@ -76,7 +76,7 @@ resource "aws_lb_target_group" "front-end-lb-target-group" {
   port        = "80"
   protocol    = "HTTP"
   target_type = "instance"
-  vpc_id      = data.aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
   health_check {
     path                = "/"
     healthy_threshold   = 2

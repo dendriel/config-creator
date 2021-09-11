@@ -2,7 +2,7 @@ resource "aws_lb" "alb" {
   name               = "config-creator-alb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = module.vpc.public_subnets
+  subnets            = data.aws_subnet_ids.public.ids
   security_groups = [aws_security_group.alb-sg.id]
   
   enable_deletion_protection = false
@@ -15,7 +15,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_security_group" "alb-sg" {
   name   = "config-creator-alb-sg"
-  vpc_id = data.aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
   ingress {
     from_port   = 0
     to_port     = 0
@@ -91,31 +91,3 @@ resource "aws_lb_listener_rule" "config-creator-auth-rule" {
     }
   }
 }
-
-# resource "aws_lb_listener" "config-creator-auth-listener" {
-#   load_balancer_arn = aws_lb.alb.arn
-#   port              = "80"
-#   protocol          = "HTTP"
-# }
-
-# resource "aws_lb_listener_rule" "config-creator-auth-rule" {
-#   listener_arn = aws_lb_listener.config-creator-auth-listener.arn
-#   priority     = 100
-
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.alb.arn
-#   }
-
-#   condition {
-#     path_pattern {
-#       values = ["/auth/*"]
-#     }
-#   }
-
-#   condition {
-#     host_header {
-#       values = [aws_lb.alb.dns_name]
-#     }
-#   }
-# }

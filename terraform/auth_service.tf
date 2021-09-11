@@ -83,7 +83,7 @@ resource "aws_lb_target_group" "auth-lb-target-group" {
   port        = "8080"
   protocol    = "HTTP"
   target_type = "instance"
-  vpc_id      = data.aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
   health_check {
     path                = "/health"
     healthy_threshold   = 2

@@ -15,19 +15,20 @@ resource "aws_db_instance" "config-creator" {
 
 resource "aws_db_subnet_group" "config-creator-db" {
   name = "config-creator"
-  subnet_ids = module.vpc.private_subnets
+  # subnet_ids = aws_vpc.main.private_subnets
+  subnet_ids = data.aws_subnet_ids.private.ids
 }
 
 resource "aws_security_group" "rds-sg" {
   name        = "rds-sg"
   description = "Allow RDS traffic"
-  vpc_id      = data.aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     protocol    = "tcp"
     from_port   = 3306
     to_port     = 3306
-    cidr_blocks = [module.vpc.vpc_cidr_block]
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
   egress {

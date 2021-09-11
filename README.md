@@ -106,9 +106,12 @@ Destroy the infrastructure:
 terraform destroy
 ```
 
-Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting):
+Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting those):
 
 - ECS cluster;
 - Auto scaling group;
 - Terminate remaining EC2 instances.
-  
+
+Misc:
+- aws_db_instance termination takes many minutes;
+- aws_vpc termination got stuck only once for me. But it was the last resource and removing it via AWS console is trivial.
