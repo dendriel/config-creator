@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "auth" {
     {
       "name": "config-creator-auth",
       "image": "registry.hub.docker.com/dendriel/npc-data-manager-auth:latest",
-      "cpu": 10,
+      "cpu": 128,
       "memory": 256,
       "essential": true,
       "portMappings": [

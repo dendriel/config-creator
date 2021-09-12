@@ -19,7 +19,6 @@ services:
       - MONGO_DB_PORT=27017
       - MONGO_DB_USER=root
       - MONGO_DB_PASS=pass
-      - AUTH_SERVICE_URL=http://auth-service:8080
       - EXPORTER_QUEUE_URL=http://sqs-service:9324
       - AWS_ACCESS_KEY_ID=1111
       - AWS_SECRET_KEY=2222

@@ -24,3 +24,15 @@ variable db {
         pass = string
     })
 }
+
+variable mongodb {
+    type = object({
+        name = string
+        user = string
+        pass = string
+    })
+}
+
+variable service_auth_key {
+    type = string
+}

@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "front" {
     {
       "name": "config-creator-front",
       "image": "registry.hub.docker.com/dendriel/config-creator-front:latest",
-      "cpu": 10,
+      "cpu": 128,
       "memory": 256,
       "essential": true,
       "portMappings": [

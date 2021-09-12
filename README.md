@@ -109,8 +109,7 @@ terraform destroy
 Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting those):
 
 - ECS cluster;
-- Auto scaling group;
-- Terminate remaining EC2 instances.
+- Auto scaling group.
 
 Misc:
 - aws_db_instance termination takes many minutes;

@@ -31,12 +31,6 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_route" "aws_route_public_to_igw" {
-    destination_cidr_block = "0.0.0.0/0"
-    route_table_id         = aws_route_table.rtb_public.id
-    gateway_id             = aws_internet_gateway.igw.id
-}
-
 resource "aws_subnet" "subnet_public0" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.vpc.public_subnets_cidr[0]
