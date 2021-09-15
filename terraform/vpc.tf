@@ -14,11 +14,21 @@ resource "aws_vpc" "main" {
 data "aws_subnet_ids" "private" {
   vpc_id = aws_vpc.main.id
   tags = { Tier = "private" }
+
+  depends_on = [
+    aws_subnet.subnet_private0,
+    aws_subnet.subnet_private1
+  ]
 }
 
 data "aws_subnet_ids" "public" {
   vpc_id = aws_vpc.main.id
   tags = { Tier = "public" }
+
+  depends_on = [
+    aws_subnet.subnet_public0,
+    aws_subnet.subnet_public1
+  ]
 }
 
 resource "aws_internet_gateway" "igw" {

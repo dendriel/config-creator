@@ -19,7 +19,7 @@ data "aws_ami" "amazon_linux" {
 }
 
 resource "aws_security_group" "ec2-sg" {
-  name        = "config-creator-allow-all-ec2"
+  name        = "ecs-client-allow-all"
   description = "Allow all"
   vpc_id      = aws_vpc.main.id
   ingress {
@@ -42,13 +42,13 @@ resource "aws_security_group" "ec2-sg" {
 }
 
 resource "aws_launch_configuration" "lc" {
-  name                        = "config-creator-lc"
+  name                        = "ecs-client-lc"
   image_id                    = data.aws_ami.amazon_linux.id
   instance_type               = "t2.micro"
   iam_instance_profile        = aws_iam_instance_profile.ecs_service_role.name
   key_name                    = var.launch_configuration_key_name
   security_groups             = [aws_security_group.ec2-sg.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   user_data                   = <<EOF
 #! /bin/bash
@@ -62,18 +62,20 @@ EOF
 }
 
 resource "aws_autoscaling_group" "asg" {
-  name                      = "config-creator-asg"
+  name                      = "ecs-clients-asg"
   launch_configuration      = aws_launch_configuration.lc.name
   min_size                  = 0
   desired_capacity          = 0
   max_size                  = 5
   health_check_type         = "ELB"
   health_check_grace_period = 300
-  vpc_zone_identifier       = data.aws_subnet_ids.public.ids
+  vpc_zone_identifier       = data.aws_subnet_ids.private.ids
 
   protect_from_scale_in = false
 
   lifecycle {
     create_before_destroy = true
+    # avoid reseting desired capacity to 0 on aws
+    ignore_changes = [desired_capacity]
   }
 }
