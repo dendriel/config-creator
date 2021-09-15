@@ -2,7 +2,7 @@ resource "aws_lb" "alb" {
   name               = "config-creator-alb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = data.aws_subnet_ids.private.ids
+  subnets            = data.aws_subnet_ids.public.ids
   security_groups    = [aws_security_group.alb-sg.id]
   
   enable_deletion_protection = false
