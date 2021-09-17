@@ -23,7 +23,7 @@ resource "aws_instance" "mongodb" {
   ami           = data.aws_ami.amazon_linux_default.id
   instance_type = "t2.micro"
   key_name      = var.launch_configuration_key_name
-  subnet_id     = aws_subnet.subnet_private0.id
+  subnet_id     = aws_subnet.subnet_public1.id
 
   security_groups   = [ aws_security_group.mongodb-sg.id ]
 
@@ -33,7 +33,8 @@ sudo su
 yum update -y
 wget https://repo.mongodb.org/yum/amazon/mongodb-org-3.0.repo -P /etc/yum.repos.d/
 yum install -y mongodb-org
-service mongod start
+sed -i '/bindIp: /s/127.0.0.1/0.0.0.0/' /etc/mongodb.conf
+service mongod restart
 mongo
 use admin
 db.createUser({user: '${var.mongodb.user}', pwd: '${var.mongodb.pass}', roles: [{role: 'readWrite', db: '${var.mongodb.name}'}]})
@@ -100,7 +101,7 @@ resource "aws_security_group" "mongodb-sg" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cloudwatch-metric-alarm-mongodb-cpu" {
-     alarm_name                = "cpu-utilization"
+     alarm_name                = "mongodb-instance-cpu-utilization"
      comparison_operator       = "GreaterThanOrEqualToThreshold"
      evaluation_periods        = "2"
      metric_name               = "CPUUtilization"
