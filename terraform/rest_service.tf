@@ -26,8 +26,9 @@ resource "aws_ecs_task_definition" "rest" {
         { "name": "SERVICE_AUTH_KEY",   "value": "${var.service_auth_key}" },
         { "name": "MONGO_DB_HOST",      "value": "${aws_instance.mongodb.private_dns}" },
         { "name": "MONGO_DB_NAME",      "value": "${var.mongodb.name}" },
-        { "name": "MYSQL_USER",         "value": "${var.mongodb.user}" },
-        { "name": "MYSQL_PASS",         "value": "${var.mongodb.pass}" },
+        { "name": "MONGO_DB_USER",      "value": "${var.mongodb.user}" },
+        { "name": "MONGO_DB_PASS",      "value": "${var.mongodb.pass}" },
+        { "name": "EXPORTER_ENABLED",   "value": "false"},
         { "name": "EXPORTER_QUEUE_URL", "value": "http://localhost:9324" },
         { "name": "AWS_ACCESS_KEY_ID",  "value": "1111" },
         { "name": "AWS_SECRET_KEY",     "value": "2222" }

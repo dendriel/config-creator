@@ -33,11 +33,11 @@ sudo su
 yum update -y
 wget https://repo.mongodb.org/yum/amazon/mongodb-org-3.0.repo -P /etc/yum.repos.d/
 yum install -y mongodb-org
-sed -i '/bindIp: /s/127.0.0.1/0.0.0.0/' /etc/mongodb.conf
+sed -i '/bindIp: /s/127.0.0.1/0.0.0.0/' /etc/mongod.conf
+service mongod start
+mongo ${var.mongodb.name} --eval "db.createUser({user: '${var.mongodb.user}', pwd: '${var.mongodb.pass}', roles: [{role: 'readWrite', db: '${var.mongodb.name}'}]})"
+printf "security:\n  authorization: enabled\n" >> /etc/mongod.conf
 service mongod restart
-mongo
-use admin
-db.createUser({user: '${var.mongodb.user}', pwd: '${var.mongodb.pass}', roles: [{role: 'readWrite', db: '${var.mongodb.name}'}]})
 EOF
 
   lifecycle {
