@@ -106,6 +106,10 @@ Destroy the infrastructure:
 terraform destroy
 ```
 
+To allow rest-service to connect to SQS, we need to specify `aws_access_key_id` and `aws_secret_key` when applying. Another way to provide 
+these credentials is via environment variables using `TF_VAR_aws_access_key_id` and `TF_VAR_aws_secret_key`.
+
+
 Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting those):
 
 - ECS cluster;

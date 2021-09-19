@@ -25,7 +25,7 @@ resource "aws_instance" "mongodb" {
   key_name      = var.launch_configuration_key_name
   subnet_id     = aws_subnet.subnet_public1.id
 
-  security_groups   = [ aws_security_group.mongodb-sg.id ]
+  vpc_security_group_ids    = [ aws_security_group.mongodb-sg.id ]
 
   user_data         = <<EOF
 #! /bin/bash
@@ -43,10 +43,6 @@ EOF
   lifecycle {
     ignore_changes = [ami]
   }
-
-  depends_on = [
-    aws_security_group.mongodb-sg
-  ]
 
   tags = {
     Name      = "config-creator-mongodb"

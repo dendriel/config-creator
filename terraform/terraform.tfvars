@@ -2,7 +2,6 @@ region = "sa-east-1"
 
 launch_configuration_key_name = "ec2-default"
 
-
 vpc = {
     azs                 = ["sa-east-1a", "sa-east-1c"]
     cidr                = "10.0.0.0/16"
@@ -20,6 +19,10 @@ mongodb = {
     name = "config_creator"
     user = "root"
     pass = "bfcb2b71034c430c8d243772edae4361"
+}
+
+sqs = {
+    name = "config-creator-exporter"
 }
 
 # TODO: make services get keys from secrets
