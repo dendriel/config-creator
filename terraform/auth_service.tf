@@ -23,9 +23,9 @@ resource "aws_ecs_task_definition" "auth" {
       "environment": [
         { "name": "BASE_PATH",  "value": "/auth" },
         { "name": "MYSQL_HOST", "value": "${aws_db_instance.config-creator.address}" },
-        { "name": "MYSQL_DB",   "value":  "${aws_db_instance.config-creator.name}" },
-        { "name": "MYSQL_USER", "value":  "${var.db.user}" },
-        { "name": "MYSQL_PASS", "value":  "${var.db.pass}" }
+        { "name": "MYSQL_DB",   "value": "${aws_db_instance.config-creator.name}" },
+        { "name": "MYSQL_USER", "value": "${var.db.user}" },
+        { "name": "MYSQL_PASS", "value": "${var.db.pass}" }
       ]
     }
 ])

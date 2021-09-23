@@ -56,7 +56,7 @@ resource "aws_lb_listener" "config-creator-lb-listener" {
 
 resource "aws_lb_listener_rule" "config-creator-front-rule" {
   listener_arn = aws_lb_listener.config-creator-lb-listener.arn
-  priority     = 100
+  priority     = 1000
 
   action {
     type             = "forward"
@@ -72,7 +72,7 @@ resource "aws_lb_listener_rule" "config-creator-front-rule" {
 
 resource "aws_lb_listener_rule" "config-creator-auth-rule" {
   listener_arn = aws_lb_listener.config-creator-lb-listener.arn
-  priority     = 80
+  priority     = 70
 
   action {
     type             = "forward"
@@ -94,7 +94,7 @@ resource "aws_lb_listener_rule" "config-creator-auth-rule" {
 
 resource "aws_lb_listener_rule" "config-creator-rest-rule" {
   listener_arn = aws_lb_listener.config-creator-lb-listener.arn
-  priority     = 90
+  priority     = 80
 
   action {
     type             = "forward"
@@ -110,6 +110,28 @@ resource "aws_lb_listener_rule" "config-creator-rest-rule" {
   condition {
     path_pattern {
       values = ["/rest/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "config-creator-storage-rule" {
+  listener_arn = aws_lb_listener.config-creator-lb-listener.arn
+  priority     = 90
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.storage-lb-target-group.arn
+  }
+
+  condition {
+    host_header {
+      values = [aws_lb.alb.dns_name]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/storage/*"]
     }
   }
 }

@@ -1,6 +1,9 @@
 resource "aws_ecs_cluster" "config-creator" {
   name               = "config-creator"
   capacity_providers = [aws_ecs_capacity_provider.capacity-provider.name]
+
+  depends_on = [aws_internet_gateway.igw]
+
   tags = {
     env       = "prod"
     terraform = "true"
@@ -20,4 +23,6 @@ resource "aws_ecs_capacity_provider" "capacity-provider" {
       maximum_scaling_step_size = 1
     }
   }
+
+    depends_on = [aws_autoscaling_group.asg]
 }
