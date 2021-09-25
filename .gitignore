@@ -73,3 +73,5 @@ data/mysql_data/*
 data/mongo_data/*
 
 terraform/test/*
+
+*.zip
