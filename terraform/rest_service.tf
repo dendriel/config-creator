@@ -4,7 +4,7 @@ resource "aws_ecs_task_definition" "rest" {
   container_definitions = jsonencode([
     {
       "name": "config-creator-rest",
-      "image": "registry.hub.docker.com/dendriel/config-creator-rest:latest",
+      "image": "public.ecr.aws/l3o8c7n1/dendriel/config-creator-rest:latest",
       "cpu": 128,
       "memory": 256,
       "essential": true,

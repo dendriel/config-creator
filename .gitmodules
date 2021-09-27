@@ -1,0 +1,3 @@
+[submodule "terraform/config-creator-exporter"]
+	path = terraform/config-creator-exporter
+	url = https://github.com/dendriel/config-creator-exporter.git

@@ -76,6 +76,6 @@ resource "aws_autoscaling_group" "asg" {
   lifecycle {
     create_before_destroy = true
     # avoid reseting desired capacity to 0 on aws
-    ignore_changes = [desired_capacity]
+    ignore_changes = [desired_capacity, tags]
   }
 }
