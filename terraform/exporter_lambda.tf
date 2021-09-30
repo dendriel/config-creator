@@ -13,11 +13,6 @@ resource "aws_lambda_function" "exporter" {
     data.archive_file.lambda-exporter-code
   ]
 
-  #  vpc_config {
-  #   subnet_ids         = data.aws_subnet_ids.public.ids
-  #   security_group_ids = [aws_security_group.exporter-lambda.id]
-  # }
-
   environment {
     variables = {
       SERVICE_URL      = "http://${aws_lb.alb.dns_name}",
@@ -79,24 +74,6 @@ resource "aws_cloudwatch_log_group" "exporter-lambda" {
 
   retention_in_days = 30
 }
-
-resource "aws_security_group" "exporter-lambda" {
-  name        = "config-creator-exporter-lambda"
-  vpc_id      = aws_vpc.main.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    env = "prod"
-    terraform = "true"
-  }
-}
-
 
 data "archive_file" "lambda-exporter-code" {
   type = "zip"
