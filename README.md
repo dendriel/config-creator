@@ -80,7 +80,7 @@ Stop and remove all containers:
 docker-compose stop && docker-compose rm
 ```
 
-## Run with terraform (WIP)
+## Run with terraform
 
 Terraform creates all needed infra to run Config Creator in AWS Cloud. Its only required to setup AWS credentials so
 terraform can communicate with AWS. Check AWS docs on how to setup the credentials: https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
@@ -110,7 +110,7 @@ To allow rest-service to connect to SQS, we need to specify `aws_access_key_id` 
 these credentials is via environment variables using `TF_VAR_aws_access_key_id` and `TF_VAR_aws_secret_key`.
 
 
-Resources that may have to be deleted manually (wait for internet gateway deletion to be stuck before deleting those):
+Resources that may have to be deleted manually - wait for ECS cluster deletion to get stuck before deleting those:
 
 - ECS cluster;
 - Auto scaling group.
@@ -118,3 +118,18 @@ Resources that may have to be deleted manually (wait for internet gateway deleti
 Misc:
 - aws_db_instance termination takes many minutes;
 - aws_vpc termination got stuck only once for me. But it was the last resource and removing it via AWS console is trivial.
+
+### Solution Diagram
+AWS deploy solution architecture.
+![Config Creator Architecture](doc/config_creator_arch.png)
+
+Initially, I did deploy everything inside a private subnet, but it requires a NAT gateway and many VPC endpoints which are expensive.
+**TODO: deploy inside a private subnet by replacing the NAT gateway by NAT instance inside.**
+
+### Resources Diagram
+
+Visual representation of everything created/configured via terraform deploy in aws:
+![AWS resources](doc/terraform_deploy_resources.png)
+
+
+
