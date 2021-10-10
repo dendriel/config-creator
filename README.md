@@ -124,7 +124,7 @@ AWS deploy solution architecture.
 ![Config Creator Architecture](doc/config_creator_arch.png)
 
 Initially, I did deploy everything inside a private subnet, but it requires a NAT gateway and many VPC endpoints which are expensive.
-**TODO: deploy inside a private subnet by replacing the NAT gateway by NAT instance inside.**
+**TODO: deploy inside a private subnet replacing the NAT gateway by a NAT instance.**
 
 ### Resources Diagram
 
