@@ -4,7 +4,7 @@ resource "aws_ecs_task_definition" "auth" {
   container_definitions = jsonencode([
     {
       "name": "config-creator-auth",
-      "image": "registry.hub.docker.com/dendriel/npc-data-manager-auth:latest",
+      "image": "public.ecr.aws/l3o8c7n1/dendriel/npc-data-manager-auth:latest",
       "cpu": 128,
       "memory": 256,
       "essential": true,
