@@ -61,7 +61,7 @@ docker-compose up
 
 Credentials:
 - Username: root
-- Password: dendriel
+- Password: 608ee253affc4e5b9712a1ceccc975bd
 
 Docker-compose will create the following containers:
 
