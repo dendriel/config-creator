@@ -3,6 +3,11 @@ variable region {
     description = "Region in which to deploy Config Creator application."
 }
 
+variable storage_bucket_name {
+    type        = string
+    description = "Bucket to save exported configurations."
+}
+
 variable vpc {
     type = object({
         cidr                 = string
@@ -16,13 +21,13 @@ variable vpc {
 # rest_service EXPORTER_ENABLED env var to false.
 variable aws_access_key_id {
     type = string
-    description = "Used by REST service to connect to SQS. Can be disabled through EXPORTER_ENABLED env var from rest-service."
+    description = "Used by REST and Storage services to connect to SQS and S3."
     sensitive = true
 }
 
 variable aws_secret_key {
     type = string
-    description = "Used by REST service to connect to SQS. Can be disabled through EXPORTER_ENABLED env var from rest-service."
+    description = "Used by REST and Storage services to connect to SQS and S3."
     sensitive = true
 }
 

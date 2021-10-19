@@ -2,6 +2,8 @@ region = "sa-east-1"
 
 launch_configuration_key_name = "ec2-default"
 
+storage_bucket_name = "config-creator"
+
 vpc = {
     azs                 = ["sa-east-1a", "sa-east-1c"]
     cidr                = "10.0.0.0/16"
@@ -26,4 +28,4 @@ sqs = {
 }
 
 # TODO: make services get keys from secrets
-service_auth_key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXJ2aWNlLnVzZXIwMSIsImV4cCI6MTYzNDA2OTQwMywiaWF0IjoxNjMxNDc3NDAzfQ.ZT3R7PSqQ2SmQ4vkyCxZb2BB7oObgl6cyGk0LtUBJZQ"
+service_auth_key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXJ2aWNlLnVzZXIwMSIsImV4cCI6MTYzNzE5MDYxMiwiaWF0IjoxNjM0NTk4NjEyfQ.NGydDd1h85ZXwivBR1l3CS0Znu-YLkUGXkUhEK_Gbp8"

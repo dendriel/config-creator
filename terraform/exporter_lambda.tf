@@ -79,7 +79,6 @@ data "archive_file" "lambda-exporter-code" {
   type = "zip"
 
   source_dir  = "${path.module}/config-creator-exporter/src/lambda"
-  # source_dir  = data.null_data_source.wait_for_lambda_exporter.outputs["source_dir"]
   output_path = "${path.module}/config-creator-exporter.zip"
 
   depends_on = [
@@ -99,10 +98,3 @@ resource "null_resource" "lambda_dependencies" {
     node = sha256(join("",fileset(path.module, "config-creator-exporter/src/lambda/service/*.js")))
   }
 }
-
-# data "null_data_source" "wait_for_lambda_exporter" {
-#   inputs = {
-#     lambda_dependency_id = null_resource.lambda_dependencies.id
-#     source_dir           = "${path.module}/config-creator-exporter/src/lambda"
-#   }
-# }
